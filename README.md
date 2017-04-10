@@ -34,3 +34,7 @@ In our project, we plan to create a blockchain network which allows automation o
 Abstract:
 Recommendation systems have been incredibly popular for the past several years and are being utilized by multiple services such as online shopping websites, video on demand services, etc. This recommendation system can also be used by library systems for suggesting books or publications based on the user’s reading habits. In the global world of e-business services, Library system plays a major role in benefiting the users in various ways.
 In our project, we plan to design and implement a recommendation system that combines context-based and collaborative filtering techniques to predict and recommend books or publications. Thus, each suggestion provided to the users helps them to discover various other books, articles, journals, and scholarly publications based on the previous checkouts made by the users and based on what they read, what they have in cart, what they search and recommends them with what’s popular or even the best sellers for the same.The content features of books, papers, articles will have details of keywords and tags as the category/genre, authors, sub-category, availability of the items and user ratings. 
+
+
+References:
+1. http://ranjanr.blogspot.com/
