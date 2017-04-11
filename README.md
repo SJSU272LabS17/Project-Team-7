@@ -19,7 +19,7 @@ In this project, we plan to design and implement a predictive analytics model wh
 
 
 
-#3. Fraudulent insurance claim management using Blockchain technology
+#3. Fraudulent insurance claim management using Blockchain technology - APPROVED
 
 Abstract:
 The rise of Blockchain technology has provided vast transformation opportunities as it can reduce the overall time, administration and processing costs significantly. The scope for use of Blockchain is growing in insurance as a lot of interactions involve multiple external agencies/vendors and require secure maintenance of customer data. The associations of insurers can use services provided by the third party vendors to  automate the claim process and manage fraudulent claims. Several entities can use the stored and verified digital data within the Blockchain with the consent of the customer. This will reduce the hassles of submitting documents multiple times improving the customer experience. Blockchain system enables multiple internal users access the data without modifying it.
