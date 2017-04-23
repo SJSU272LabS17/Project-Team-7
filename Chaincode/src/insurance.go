@@ -7,8 +7,8 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
-// SimpleChaincode example simple Chaincode implementation
-type SimpleChaincode struct {
+// CarInsuranceChaincode
+type CarInsuranceChaincode struct {
 }
 
 //==============================================================================================================================
@@ -31,7 +31,7 @@ const STATE_CLAIM_INSPECTION = 3
 const STATE_SETTLEMENT = 4
 
 func main() {
-	err := shim.Start(new(SimpleChaincode))
+	err := shim.Start(new(CarInsuranceChaincode))
 	if err != nil {
 		fmt.Printf("Error starting Simple chaincode: %s", err)
 	} else {
@@ -42,7 +42,7 @@ func main() {
 //==============================================================================================================================
 //	 Init method for chaincode
 //==============================================================================================================================
-func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *CarInsuranceChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("Init..")
 	return nil, nil
 }
@@ -50,7 +50,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 //==============================================================================================================================
 //	 Invoke method to invoke a chaincode function
 //==============================================================================================================================
-func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *CarInsuranceChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("Invoke..")
 	return nil, nil
 }
@@ -58,7 +58,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 //==============================================================================================================================
 //	 Query method for queries on blockchain
 //==============================================================================================================================
-func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *CarInsuranceChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("Query..")
 	return nil, nil
 }
