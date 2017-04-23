@@ -7,3 +7,7 @@ https://console.ng.bluemix.net/docs/services/blockchain/ibmblockchain_tutorials.
 3. Learn GO language
 https://golang.org/doc/
 https://github.com/golang/go/wiki/Learn
+
+4. Installing GO IDE for Go programming (if needed)
+http://www.dotnetjalps.com/2015/01/install-go-language-and-lite-ide-ubuntu.html
+
