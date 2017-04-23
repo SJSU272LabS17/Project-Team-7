@@ -1,7 +1,8 @@
 package main
 
 import (
-	//"errors"
+	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -44,6 +45,10 @@ func main() {
 //==============================================================================================================================
 func (t *CarInsuranceChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("Init..")
+	if len(args) != 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 1 argument.")
+	}
+
 	return nil, nil
 }
 
@@ -52,6 +57,13 @@ func (t *CarInsuranceChaincode) Init(stub shim.ChaincodeStubInterface, function 
 //==============================================================================================================================
 func (t *CarInsuranceChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("Invoke..")
+
+	if function == "init" {
+		return t.Init(stub, "init", args)
+	} else if function == "createClaim" {
+		return t.createClaim(stub, args)
+	}
+
 	return nil, nil
 }
 
@@ -60,5 +72,55 @@ func (t *CarInsuranceChaincode) Invoke(stub shim.ChaincodeStubInterface, functio
 //==============================================================================================================================
 func (t *CarInsuranceChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("Query..")
+
+	if function == "getClaim" { //read a variable
+		return t.getClaim(stub, args)
+	}
+
+	return nil, errors.New("Received unknown function query: " + function)
+}
+
+//=================================================================================================================================
+//	 createClaim - Creates a new Claim object and saves it.
+//   args - IncidentDate, FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber
+//=================================================================================================================================
+func (t *CarInsuranceChaincode) createClaim(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	if len(args) != 9 {
+		return nil, errors.New("Incorrect number of arguments. IncidentDate, FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber required.")
+	}
+
+	var newUser = NewUser(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8])
+	var newClaim = NewClaim("", args[0], newUser)
+
+	bytes, err := json.Marshal(newClaim)
+
+	if err != nil {
+		return nil, errors.New("Error creating new claim")
+	}
+
+	err = stub.PutState("claim", bytes)
+
 	return nil, nil
+}
+
+//=================================================================================================================================
+//	 getClaim - Gets claim details.
+//   args - key
+//=================================================================================================================================
+func (t *CarInsuranceChaincode) getClaim(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var key, jsonResp string
+	//var err error
+
+	if len(args) != 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting name of the key to query")
+	}
+
+	key = args[0]
+	valAsbytes, err := stub.GetState(key)
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
+		return nil, errors.New(jsonResp)
+	}
+
+	return valAsbytes, nil
 }

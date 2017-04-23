@@ -9,7 +9,7 @@ type Policy struct {
 	Type      string
 	OwnerId   string
 	Insurer   string
-	CarNumber string
+	VIN       string
 	StartDate string
 	EndDate   string
 }
