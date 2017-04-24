@@ -100,6 +100,15 @@ func (t *CarInsuranceChaincode) createClaim(stub shim.ChaincodeStubInterface, ar
 
 	err = stub.PutState("claim", bytes)
 
+	bytes, err = json.Marshal(STATE_INIT_CLAIM)
+
+	if err != nil {
+		return nil, errors.New("Error setting init claim state.")
+	}
+
+	// Set the state when new claim is created.
+	err = stub.PutState("current_state", bytes)
+
 	return nil, nil
 }
 
