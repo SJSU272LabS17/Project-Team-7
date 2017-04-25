@@ -73,7 +73,7 @@ func (t *CarInsuranceChaincode) Invoke(stub shim.ChaincodeStubInterface, functio
 func (t *CarInsuranceChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("Query..")
 
-	if function == "getClaim" { //read a variable
+	if function == "getClaim" {
 		return t.getClaim(stub, args)
 	}
 
@@ -82,15 +82,19 @@ func (t *CarInsuranceChaincode) Query(stub shim.ChaincodeStubInterface, function
 
 //=================================================================================================================================
 //	 createClaim - Creates a new Claim object and saves it.
-//   args - IncidentDate, FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber
+//   args - IncidentDate, Amount,FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber
 //=================================================================================================================================
 func (t *CarInsuranceChaincode) createClaim(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	if len(args) != 9 {
-		return nil, errors.New("Incorrect number of arguments. IncidentDate, FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber required.")
+	if len(args) != 10 {
+		return nil, errors.New("Incorrect number of arguments. IncidentDate, Amount, FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber required.")
+	}
+
+	if len(args[1]) == 0 {
+		return nil, errors.New("Invalid Amount.")
 	}
 
 	var newUser = NewUser(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8])
-	var newClaim = NewClaim("", args[0], newUser)
+	var newClaim = NewClaim("", args[0], args[1], newUser)
 
 	bytes, err := json.Marshal(newClaim)
 
@@ -105,9 +109,6 @@ func (t *CarInsuranceChaincode) createClaim(stub shim.ChaincodeStubInterface, ar
 	if err != nil {
 		return nil, errors.New("Error setting init claim state.")
 	}
-
-	// Set the state when new claim is created.
-	err = stub.PutState("current_state", bytes)
 
 	return nil, nil
 }
@@ -157,12 +158,33 @@ func (t *CarInsuranceChaincode) getClaimStatus(stub shim.ChaincodeStubInterface)
 }
 
 //=================================================================================================================================
+//	 updateClaimStatus - Updates current state of claim process.
+//=================================================================================================================================
+func (t *CarInsuranceChaincode) updateClaimStatus(stub shim.ChaincodeStubInterface, claimData Claim) ([]byte, error) {
+
+	bytes, err := json.Marshal(claimData)
+
+	if err != nil {
+		return nil, errors.New("Error marshalling claim data")
+	}
+
+	err = stub.PutState("claim", bytes)
+
+	if err != nil {
+		return nil, errors.New("Error updating claim status " + string(claimData.Status) + " to the ledger.")
+	}
+
+	return nil, nil
+}
+
+//=================================================================================================================================
 //	 verifyUserIdentity - Verifies user identity (first stage).
 //=================================================================================================================================
 func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterface) ([]byte, error) {
 	var claimData Claim
 	var jsonResp string
-	var userData, claimUser User
+	var userData []User
+	var claimUser User
 	var log string = ""
 	userData = GetUserData()
 	data, err := stub.GetState("claim")
@@ -180,11 +202,16 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 
 	claimUser = claimData.UserDetails
 
-	if userData.FirstName == claimUser.FirstName && userData.LastName == claimUser.LastName && userData.BirthDate == claimUser.BirthDate && userData.Email == claimUser.Email && userData.LicencePlateNumber == claimUser.LicencePlateNumber && userData.PolicyId == claimUser.PolicyId && userData.SSN == claimUser.SSN && userData.VIN == claimUser.VIN {
-		log = log + "User Details Verified!"
-	} else {
-		jsonResp = "{\"Error\":\"User Identity authentication failed\"}"
-		return nil, errors.New(jsonResp)
+	for i := 0; i < len(userData); i++ {
+		if userData[i].FirstName == claimUser.FirstName && userData[i].LastName == claimUser.LastName && userData[i].BirthDate == claimUser.BirthDate && userData[i].Email == claimUser.Email && userData[i].LicencePlateNumber == claimUser.LicencePlateNumber && userData[i].PolicyId == claimUser.PolicyId && userData[i].SSN == claimUser.SSN && userData[i].VIN == claimUser.VIN {
+			log = log + "User Details Verified!"
+			claimData.Status = STATE_IDENTITY_INSPECTION
+			t.updateClaimStatus(stub, claimData)
+			break
+		} else {
+			jsonResp = "{\"Error\":\"User Identity authentication failed\"}"
+			return nil, errors.New(jsonResp)
+		}
 	}
 
 	data, err = json.Marshal(log)

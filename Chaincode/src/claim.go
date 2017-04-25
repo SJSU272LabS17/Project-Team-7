@@ -21,19 +21,21 @@ type Claim struct {
 	Id           string
 	IncidentDate string
 	Status       int
+	Amount       string
 	UserDetails  User
 }
 
 //==============================================================================================================================
 //	 NewClaim - created new claim with the parameters passed.
 //==============================================================================================================================
-func NewClaim(id string, incident_date string, user_details User) Claim {
+func NewClaim(id string, incident_date string, amount string, user_details User) Claim {
 
 	var newClaim Claim
 
 	newClaim.Id = id
 	newClaim.IncidentDate = incident_date
 	newClaim.UserDetails = user_details
+	newClaim.Amount = amount
 	newClaim.Status = STATE_INIT_CLAIM
 
 	return newClaim
