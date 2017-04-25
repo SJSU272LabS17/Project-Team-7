@@ -62,6 +62,8 @@ func (t *CarInsuranceChaincode) Invoke(stub shim.ChaincodeStubInterface, functio
 		return t.Init(stub, "init", args)
 	} else if function == "createClaim" {
 		return t.createClaim(stub, args)
+	} else if function == "verifyIdentity" {
+		return t.verifyUserIdentity(stub)
 	}
 
 	return nil, nil
