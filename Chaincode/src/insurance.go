@@ -127,9 +127,72 @@ func (t *CarInsuranceChaincode) getClaim(stub shim.ChaincodeStubInterface, args 
 	key = args[0]
 	valAsbytes, err := stub.GetState(key)
 	if err != nil {
-		jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
+		jsonResp = "{\"Error\":\"Failed to get value of " + key + "\"}"
 		return nil, errors.New(jsonResp)
 	}
 
 	return valAsbytes, nil
+}
+
+//=================================================================================================================================
+//	 getClaimStatus - Gets current state of claim process.
+//=================================================================================================================================
+func (t *CarInsuranceChaincode) getClaimStatus(stub shim.ChaincodeStubInterface) (int, error) {
+	var jsonResp string
+	var claimData Claim
+
+	valAsbytes, err := stub.GetState("claim")
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to get claim status\"}"
+		return -1, errors.New(jsonResp)
+	}
+
+	err = json.Unmarshal(valAsbytes, &claimData)
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to UnMarshal claim data\"}"
+		return -1, errors.New(jsonResp)
+	}
+
+	return claimData.Status, nil
+}
+
+//=================================================================================================================================
+//	 verifyUserIdentity - Verifies user identity (first stage).
+//=================================================================================================================================
+func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterface) ([]byte, error) {
+	var claimData Claim
+	var jsonResp string
+	var userData, claimUser User
+	var log string = ""
+	userData = GetUserData()
+	data, err := stub.GetState("claim")
+
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to retrieve claim details\"}"
+		return nil, errors.New(jsonResp)
+	}
+
+	err = json.Unmarshal(data, &claimData)
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to UnMarshal claim data\"}"
+		return nil, errors.New(jsonResp)
+	}
+
+	claimUser = claimData.UserDetails
+
+	if userData.FirstName == claimUser.FirstName && userData.LastName == claimUser.LastName && userData.BirthDate == claimUser.BirthDate && userData.Email == claimUser.Email && userData.LicencePlateNumber == claimUser.LicencePlateNumber && userData.PolicyId == claimUser.PolicyId && userData.SSN == claimUser.SSN && userData.VIN == claimUser.VIN {
+		log = log + "User Details Verified!"
+	} else {
+		jsonResp = "{\"Error\":\"User Identity authentication failed\"}"
+		return nil, errors.New(jsonResp)
+	}
+
+	data, err = json.Marshal(log)
+
+	if err != nil {
+		return nil, errors.New("Error creating log")
+	}
+
+	return data, nil
+
 }

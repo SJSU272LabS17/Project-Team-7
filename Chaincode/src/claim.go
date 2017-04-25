@@ -20,6 +20,7 @@ type User struct {
 type Claim struct {
 	Id           string
 	IncidentDate string
+	Status       int
 	UserDetails  User
 }
 
@@ -33,6 +34,7 @@ func NewClaim(id string, incident_date string, user_details User) Claim {
 	newClaim.Id = id
 	newClaim.IncidentDate = incident_date
 	newClaim.UserDetails = user_details
+	newClaim.Status = STATE_INIT_CLAIM
 
 	return newClaim
 }
