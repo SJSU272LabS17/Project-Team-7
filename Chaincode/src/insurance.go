@@ -64,7 +64,7 @@ func (t *CarInsuranceChaincode) Invoke(stub shim.ChaincodeStubInterface, functio
 	} else if function == "createClaim" {
 		return t.createClaim(stub, args)
 	} else if function == "verifyIdentity" {
-		return t.verifyUserIdentity(stub)
+		return t.verifyUserIdentity(stub, args[0])
 	}
 
 	return nil, nil
@@ -188,14 +188,14 @@ func (t *CarInsuranceChaincode) updateClaimStatus(stub shim.ChaincodeStubInterfa
 //=================================================================================================================================
 //	 verifyUserIdentity - Verifies user identity (first stage).
 //=================================================================================================================================
-func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterface) ([]byte, error) {
+func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterface, id string) ([]byte, error) {
 	var claimData Claim
 	var jsonResp string
 	var userData []User
 	var claimUser User
 	var log string = ""
 	userData = GetUserData()
-	data, err := stub.GetState("claim")
+	data, err := stub.GetState(id)
 
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to retrieve claim details\"}"
