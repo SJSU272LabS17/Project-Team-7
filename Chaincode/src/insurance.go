@@ -96,7 +96,7 @@ func (t *CarInsuranceChaincode) createClaim(stub shim.ChaincodeStubInterface, ar
 		return nil, errors.New("Invalid Amount.")
 	}
 
-	var newUser = NewUser(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8])
+	var newUser = NewUser(args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10])
 
 	data, err := strconv.ParseFloat(args[2], 32)
 	if err != nil {
@@ -213,9 +213,9 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 	for i := 0; i < len(userData); i++ {
 		if userData[i].FirstName == claimUser.FirstName && userData[i].LastName == claimUser.LastName && userData[i].BirthDate == claimUser.BirthDate && userData[i].Email == claimUser.Email && userData[i].LicencePlateNumber == claimUser.LicencePlateNumber && userData[i].PolicyId == claimUser.PolicyId && userData[i].SSN == claimUser.SSN && userData[i].VIN == claimUser.VIN {
 			log = log + "User Details Verified!"
-			var updatedClaim = NewClaimWithState(claimData.Id, claimData.IncidentDate, claimData.Amount, claimUser, STATE_IDENTITY_INSPECTION)
-			//claimData.Status = STATE_IDENTITY_INSPECTION
-			t.updateClaimStatus(stub, updatedClaim)
+			//var updatedClaim = NewClaimWithState(claimData.Id, claimData.IncidentDate, claimData.Amount, claimUser, STATE_IDENTITY_INSPECTION)
+			claimData.Status = STATE_IDENTITY_INSPECTION
+			t.updateClaimStatus(stub, claimData)
 			break
 		} else {
 			jsonResp = "{\"Error\":\"User Identity authentication failed\"}"
