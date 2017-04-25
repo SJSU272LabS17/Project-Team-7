@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
@@ -84,19 +85,24 @@ func (t *CarInsuranceChaincode) Query(stub shim.ChaincodeStubInterface, function
 
 //=================================================================================================================================
 //	 createClaim - Creates a new Claim object and saves it.
-//   args - IncidentDate, Amount,FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber
+//   args - ID, IncidentDate, Amount,FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber
 //=================================================================================================================================
 func (t *CarInsuranceChaincode) createClaim(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	if len(args) != 10 {
-		return nil, errors.New("Incorrect number of arguments. IncidentDate, Amount, FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber required.")
+	if len(args) != 11 {
+		return nil, errors.New("Incorrect number of arguments. ID, IncidentDate, Amount, FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber required.")
 	}
 
-	if len(args[1]) == 0 {
+	if len(args[2]) == 0 {
 		return nil, errors.New("Invalid Amount.")
 	}
 
 	var newUser = NewUser(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8])
-	var newClaim = NewClaim("", args[0], args[1], newUser)
+
+	data, err := strconv.ParseFloat(args[2], 32)
+	if err != nil {
+		return nil, errors.New("Error getting amount.")
+	}
+	var newClaim = NewClaim(args[0], args[1], data, newUser)
 
 	bytes, err := json.Marshal(newClaim)
 
@@ -104,13 +110,13 @@ func (t *CarInsuranceChaincode) createClaim(stub shim.ChaincodeStubInterface, ar
 		return nil, errors.New("Error creating new claim")
 	}
 
-	err = stub.PutState("claim", bytes)
+	err = stub.PutState(args[0], bytes)
 
-	bytes, err = json.Marshal(STATE_INIT_CLAIM)
+	/*bytes, err = json.Marshal(STATE_INIT_CLAIM)
 
 	if err != nil {
 		return nil, errors.New("Error setting init claim state.")
-	}
+	}*/
 
 	return nil, nil
 }
@@ -140,11 +146,11 @@ func (t *CarInsuranceChaincode) getClaim(stub shim.ChaincodeStubInterface, args 
 //=================================================================================================================================
 //	 getClaimStatus - Gets current state of claim process.
 //=================================================================================================================================
-func (t *CarInsuranceChaincode) getClaimStatus(stub shim.ChaincodeStubInterface) (int, error) {
+func (t *CarInsuranceChaincode) getClaimStatus(stub shim.ChaincodeStubInterface, id string) (int, error) {
 	var jsonResp string
 	var claimData Claim
 
-	valAsbytes, err := stub.GetState("claim")
+	valAsbytes, err := stub.GetState(id)
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get claim status\"}"
 		return -1, errors.New(jsonResp)
@@ -170,7 +176,7 @@ func (t *CarInsuranceChaincode) updateClaimStatus(stub shim.ChaincodeStubInterfa
 		return nil, errors.New("Error marshalling claim data")
 	}
 
-	err = stub.PutState("claim", bytes)
+	err = stub.PutState(claimData.Id, bytes)
 
 	if err != nil {
 		return nil, errors.New("Error updating claim status " + string(claimData.Status) + " to the ledger.")
@@ -207,8 +213,9 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 	for i := 0; i < len(userData); i++ {
 		if userData[i].FirstName == claimUser.FirstName && userData[i].LastName == claimUser.LastName && userData[i].BirthDate == claimUser.BirthDate && userData[i].Email == claimUser.Email && userData[i].LicencePlateNumber == claimUser.LicencePlateNumber && userData[i].PolicyId == claimUser.PolicyId && userData[i].SSN == claimUser.SSN && userData[i].VIN == claimUser.VIN {
 			log = log + "User Details Verified!"
-			claimData.Status = STATE_IDENTITY_INSPECTION
-			t.updateClaimStatus(stub, claimData)
+			var updatedClaim = NewClaimWithState(claimData.Id, claimData.IncidentDate, claimData.Amount, claimUser, STATE_IDENTITY_INSPECTION)
+			//claimData.Status = STATE_IDENTITY_INSPECTION
+			t.updateClaimStatus(stub, updatedClaim)
 			break
 		} else {
 			jsonResp = "{\"Error\":\"User Identity authentication failed\"}"
