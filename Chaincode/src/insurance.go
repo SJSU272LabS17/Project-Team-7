@@ -191,7 +191,7 @@ func (t *CarInsuranceChaincode) updateClaimStatus(stub shim.ChaincodeStubInterfa
 func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterface, id string) ([]byte, error) {
 	var claimData Claim
 	var jsonResp string
-	var userData [5]User
+	var userData []User
 	var claimUser User
 	var log string = ""
 	userData = GetMultipleUserData()
@@ -211,9 +211,8 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 
 	claimUser = claimData.UserDetails
 
-	for i := 0; i < 5; i++ {
-		//if userData[i].FirstName == claimUser.FirstName && userData[i].LastName == claimUser.LastName && userData[i].BirthDate == claimUser.BirthDate && userData[i].Email == claimUser.Email && userData[i].LicencePlateNumber == claimUser.LicencePlateNumber && userData[i].PolicyId == claimUser.PolicyId && userData[i].SSN == claimUser.SSN && userData[i].VIN == claimUser.VIN {
-		if userData[i].FirstName == claimUser.FirstName {
+	for i := 0; i < len(userData); i++ {
+		if userData[i].FirstName == claimUser.FirstName && userData[i].LastName == claimUser.LastName && userData[i].BirthDate == claimUser.BirthDate && userData[i].Email == claimUser.Email && userData[i].LicencePlateNumber == claimUser.LicencePlateNumber && userData[i].PolicyId == claimUser.PolicyId && userData[i].SSN == claimUser.SSN && userData[i].VIN == claimUser.VIN {
 			log = log + "User Details Verified!"
 			claimData.Status = STATE_IDENTITY_INSPECTION
 			t.updateClaimStatus(stub, claimData)

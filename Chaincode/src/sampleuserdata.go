@@ -3,8 +3,8 @@ package main
 //==============================================================================================================================
 //  GetUserDate - Sample data to verify user identity
 //==============================================================================================================================
-func GetMultipleUserData() [5]User {
-	var userDetails [5]User
+func GetMultipleUserData() []User {
+	var userDetails []User
 	var newuser User
 	newuser.FirstName = "John"
 	newuser.LastName = "Doe"
