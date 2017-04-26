@@ -208,7 +208,7 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 		return nil, errors.New(jsonResp)
 	}
 
-	claimUser = claimData.UserDetails
+	//claimUser = claimData.UserDetails
 
 	for i := 0; i < 5; i++ {
 		//if userData[i].FirstName == claimUser.FirstName && userData[i].LastName == claimUser.LastName && userData[i].BirthDate == claimUser.BirthDate && userData[i].Email == claimUser.Email && userData[i].LicencePlateNumber == claimUser.LicencePlateNumber && userData[i].PolicyId == claimUser.PolicyId && userData[i].SSN == claimUser.SSN && userData[i].VIN == claimUser.VIN {
