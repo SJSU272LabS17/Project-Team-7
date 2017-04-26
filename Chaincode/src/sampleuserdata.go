@@ -3,7 +3,7 @@ package main
 //==============================================================================================================================
 //  GetUserDate - Sample data to verify user identity
 //==============================================================================================================================
-func GetUserData() []User {
+func GetMultipleUserData() []User {
 	var userDetails []User
 	var user User
 	user.FirstName = "John"
@@ -57,4 +57,18 @@ func GetUserData() []User {
 	userDetails[4] = user
 
 	return userDetails
+}
+
+func GetSingleUserData() User {
+	var newuser User
+	newuser.FirstName = "John"
+	newuser.LastName = "Doe"
+	newuser.Email = "johndoe@gmail.com"
+	newuser.SSN = "12FG254HG"
+	newuser.BirthDate = "04/23/1989"
+	newuser.PolicyId = "P12345"
+	newuser.VIN = "Gh564HG445"
+	newuser.LicencePlateNumber = "JOHNDOE"
+
+	return newuser
 }
