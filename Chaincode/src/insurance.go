@@ -9,6 +9,8 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
+var logger = shim.NewLogger("InsuranceLogger")
+
 // CarInsuranceChaincode
 type CarInsuranceChaincode struct {
 }
@@ -223,9 +225,10 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 			}
 		}
 
-		if userMatched == false {
+		if userMatched != true {
 			claimData.Status = STATE_CANCELLED
 			t.updateClaimStatus(stub, claimData)
+			logger.Infof("User Identity authentication failed")
 			jsonResp = "{\"Error\":\"User Identity authentication failed\"}"
 			return nil, errors.New(jsonResp)
 		}
