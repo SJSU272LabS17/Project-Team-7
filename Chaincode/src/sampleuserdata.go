@@ -3,58 +3,58 @@ package main
 //==============================================================================================================================
 //  GetUserDate - Sample data to verify user identity
 //==============================================================================================================================
-func GetMultipleUserData() []User {
-	var userDetails []User
-	var user User
-	user.FirstName = "John"
-	user.LastName = "Doe"
-	user.Email = "johndoe@gmail.com"
-	user.SSN = "12FG254HG"
-	user.BirthDate = "04/23/1989"
-	user.PolicyId = "P12345"
-	user.VIN = "Gh564HG445"
-	user.LicencePlateNumber = "JOHNDOE"
-	userDetails[0] = user
+func GetMultipleUserData() [5]User {
+	var userDetails [5]User
+	var newuser User
+	newuser.FirstName = "John"
+	newuser.LastName = "Doe"
+	newuser.Email = "johndoe@gmail.com"
+	newuser.SSN = "12FG254HG"
+	newuser.BirthDate = "04/23/1989"
+	newuser.PolicyId = "P12345"
+	newuser.VIN = "Gh564HG445"
+	newuser.LicencePlateNumber = "JOHNDOE"
+	userDetails[0] = newuser
 
-	user.FirstName = "Amita"
-	user.LastName = "Kamat"
-	user.Email = "amitakamat@gmail.com"
-	user.SSN = "12F76HG4HG"
-	user.BirthDate = "08/07/1990"
-	user.PolicyId = "P28789"
-	user.VIN = "Gh564HY6678"
-	user.LicencePlateNumber = "AMITAK7"
-	userDetails[1] = user
+	newuser.FirstName = "Amita"
+	newuser.LastName = "Kamat"
+	newuser.Email = "amitakamat@gmail.com"
+	newuser.SSN = "12F76HG4HG"
+	newuser.BirthDate = "08/07/1990"
+	newuser.PolicyId = "P28789"
+	newuser.VIN = "Gh564HY6678"
+	newuser.LicencePlateNumber = "AMITAK7"
+	userDetails[1] = newuser
 
-	user.FirstName = "Mohammed"
-	user.LastName = "Haroon"
-	user.Email = "mohammedh@gmail.com"
-	user.SSN = "34T56HG4HG"
-	user.BirthDate = "02/28/1989"
-	user.PolicyId = "P13589"
-	user.VIN = "Gh564GR44378"
-	user.LicencePlateNumber = "MHAROON"
-	userDetails[2] = user
+	newuser.FirstName = "Mohammed"
+	newuser.LastName = "Haroon"
+	newuser.Email = "mohammedh@gmail.com"
+	newuser.SSN = "34T56HG4HG"
+	newuser.BirthDate = "02/28/1989"
+	newuser.PolicyId = "P13589"
+	newuser.VIN = "Gh564GR44378"
+	newuser.LicencePlateNumber = "MHAROON"
+	userDetails[2] = newuser
 
-	user.FirstName = "Nethra"
-	user.LastName = "Reddy"
-	user.Email = "nethrar@gmail.com"
-	user.SSN = "90T56HGTY34"
-	user.BirthDate = "03/28/1988"
-	user.PolicyId = "P84756"
-	user.VIN = "RT469HY6678"
-	user.LicencePlateNumber = "N283RED"
-	userDetails[3] = user
+	newuser.FirstName = "Nethra"
+	newuser.LastName = "Reddy"
+	newuser.Email = "nethrar@gmail.com"
+	newuser.SSN = "90T56HGTY34"
+	newuser.BirthDate = "03/28/1988"
+	newuser.PolicyId = "P84756"
+	newuser.VIN = "RT469HY6678"
+	newuser.LicencePlateNumber = "N283RED"
+	userDetails[3] = newuser
 
-	user.FirstName = "Pavana"
-	user.LastName = "Achar"
-	user.Email = "pachar@gmail.com"
-	user.SSN = "87TR6HGTY34"
-	user.BirthDate = "05/05/1991"
-	user.PolicyId = "P75985"
-	user.VIN = "RT469HT5567"
-	user.LicencePlateNumber = "P5ACHAR"
-	userDetails[4] = user
+	newuser.FirstName = "Pavana"
+	newuser.LastName = "Achar"
+	newuser.Email = "pachar@gmail.com"
+	newuser.SSN = "87TR6HGTY34"
+	newuser.BirthDate = "05/05/1991"
+	newuser.PolicyId = "P75985"
+	newuser.VIN = "RT469HT5567"
+	newuser.LicencePlateNumber = "P5ACHAR"
+	userDetails[4] = newuser
 
 	return userDetails
 }
