@@ -31,6 +31,7 @@ const STATE_IDENTITY_INSPECTION = 1
 const STATE_VEHICLE_INSPECTION = 2
 const STATE_CLAIM_INSPECTION = 3
 const STATE_SETTLEMENT = 4
+const STATE_CANCELLED = 5
 
 func main() {
 	err := shim.Start(new(CarInsuranceChaincode))
@@ -211,25 +212,32 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 
 	claimUser = claimData.UserDetails
 
-	for i := 0; i < len(userData); i++ {
-		if userData[i].FirstName == claimUser.FirstName && userData[i].LastName == claimUser.LastName && userData[i].BirthDate == claimUser.BirthDate && userData[i].Email == claimUser.Email && userData[i].LicencePlateNumber == claimUser.LicencePlateNumber && userData[i].PolicyId == claimUser.PolicyId && userData[i].SSN == claimUser.SSN && userData[i].VIN == claimUser.VIN {
-			log = log + "User Details Verified!"
-			claimData.Status = STATE_IDENTITY_INSPECTION
-			t.updateClaimStatus(stub, claimData)
-			userMatched = true
-			break
+	if claimData.Status == STATE_INIT_CLAIM {
+		for i := 0; i < len(userData); i++ {
+			if userData[i].FirstName == claimUser.FirstName && userData[i].LastName == claimUser.LastName && userData[i].BirthDate == claimUser.BirthDate && userData[i].Email == claimUser.Email && userData[i].LicencePlateNumber == claimUser.LicencePlateNumber && userData[i].PolicyId == claimUser.PolicyId && userData[i].SSN == claimUser.SSN && userData[i].VIN == claimUser.VIN {
+				log = log + "User Details Verified!"
+				claimData.Status = STATE_IDENTITY_INSPECTION
+				t.updateClaimStatus(stub, claimData)
+				userMatched = true
+				break
+			}
 		}
-	}
 
-	if userMatched == false {
-		jsonResp = "{\"Error\":\"User Identity authentication failed\"}"
+		if userMatched == false {
+			claimData.Status = STATE_CANCELLED
+			t.updateClaimStatus(stub, claimData)
+			jsonResp = "{\"Error\":\"User Identity authentication failed\"}"
+			return nil, errors.New(jsonResp)
+		}
+
+		data, err = json.Marshal(log)
+
+		if err != nil {
+			return nil, errors.New("Error creating log")
+		}
+	} else {
+		jsonResp = "{\"Error\":\"User Identity authentication cannot be done. Claim is not in required state.\"}"
 		return nil, errors.New(jsonResp)
-	}
-
-	data, err = json.Marshal(log)
-
-	if err != nil {
-		return nil, errors.New("Error creating log")
 	}
 
 	return data, nil
