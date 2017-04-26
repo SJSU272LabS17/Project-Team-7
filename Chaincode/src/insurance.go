@@ -191,10 +191,10 @@ func (t *CarInsuranceChaincode) updateClaimStatus(stub shim.ChaincodeStubInterfa
 func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterface, id string) ([]byte, error) {
 	var claimData Claim
 	var jsonResp string
-	//var userData []User
-	//var claimUser User
+	var userData []User
+	var claimUser User
 	var log string = ""
-	//userData = GetUserData()
+	userData = GetUserData()
 	data, err := stub.GetState(id)
 
 	if err != nil {
@@ -210,18 +210,19 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 
 	//claimUser = claimData.UserDetails
 
-	/*for i := 0; i < len(userData); i++ {
-	if userData[i].FirstName == claimUser.FirstName && userData[i].LastName == claimUser.LastName && userData[i].BirthDate == claimUser.BirthDate && userData[i].Email == claimUser.Email && userData[i].LicencePlateNumber == claimUser.LicencePlateNumber && userData[i].PolicyId == claimUser.PolicyId && userData[i].SSN == claimUser.SSN && userData[i].VIN == claimUser.VIN {
-		log = log + "User Details Verified!"
-		//var updatedClaim = NewClaimWithState(claimData.Id, claimData.IncidentDate, claimData.Amount, claimUser, STATE_IDENTITY_INSPECTION)*/
-	claimData.Status = STATE_IDENTITY_INSPECTION
-	t.updateClaimStatus(stub, claimData)
-	/*	break
+	for i := 0; i < 5; i++ {
+		//if userData[i].FirstName == claimUser.FirstName && userData[i].LastName == claimUser.LastName && userData[i].BirthDate == claimUser.BirthDate && userData[i].Email == claimUser.Email && userData[i].LicencePlateNumber == claimUser.LicencePlateNumber && userData[i].PolicyId == claimUser.PolicyId && userData[i].SSN == claimUser.SSN && userData[i].VIN == claimUser.VIN {
+		if userData[i].FirstName == claimUser.FirstName {
+			log = log + "User Details Verified!"
+			//var updatedClaim = NewClaimWithState(claimData.Id, claimData.IncidentDate, claimData.Amount, claimUser, STATE_IDENTITY_INSPECTION)*/
+			claimData.Status = STATE_IDENTITY_INSPECTION
+			t.updateClaimStatus(stub, claimData)
+			break
 		} else {
 			jsonResp = "{\"Error\":\"User Identity authentication failed\"}"
 			return nil, errors.New(jsonResp)
 		}
-	}*/
+	}
 
 	data, err = json.Marshal(log)
 
