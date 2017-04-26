@@ -227,10 +227,12 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 
 		if userMatched != true {
 			claimData.Status = STATE_CANCELLED
-			t.updateClaimStatus(stub, claimData)
+			data, err = t.updateClaimStatus(stub, claimData)
+			if err != nil {
+				jsonResp = "{\"Error\":\"User Identity authentication failed. Status could not be updated.\"}"
+				return nil, errors.New(jsonResp)
+			}
 			logger.Infof("User Identity authentication failed")
-			jsonResp = "{\"Error\":\"User Identity authentication failed\"}"
-			return nil, errors.New(jsonResp)
 		}
 
 		data, err = json.Marshal(log)
