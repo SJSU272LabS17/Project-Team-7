@@ -1,2 +1,2 @@
-1. Direct status update working fine. 
-   Find why user identity verification fails - 
+1. Direct status update working fine. Single user verification working fine.
+   Find why user identity verification fails for multiple users in sample data 

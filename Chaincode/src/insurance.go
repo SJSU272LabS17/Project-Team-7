@@ -191,7 +191,7 @@ func (t *CarInsuranceChaincode) updateClaimStatus(stub shim.ChaincodeStubInterfa
 func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterface, id string) ([]byte, error) {
 	var claimData Claim
 	var jsonResp string
-	var userData []User
+	var userData [5]User
 	var claimUser User
 	var log string = ""
 	userData = GetMultipleUserData()
