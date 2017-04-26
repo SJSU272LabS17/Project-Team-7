@@ -274,6 +274,12 @@ func (t *CarInsuranceChaincode) doVehicleInspection(stub shim.ChaincodeStubInter
 		return nil, errors.New(jsonResp)
 	}
 
+	err = json.Unmarshal(data, &claimData)
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to UnMarshal claim data\"}"
+		return nil, errors.New(jsonResp)
+	}
+
 	if claimData.Status == STATE_IDENTITY_INSPECTION {
 		claimData.Status = STATE_VEHICLE_INSPECTION
 		data, err = t.updateClaimStatus(stub, claimData)
