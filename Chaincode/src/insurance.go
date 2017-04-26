@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -36,6 +37,12 @@ const STATE_SETTLEMENT = 4
 const STATE_CANCELLED = 5
 
 func main() {
+	// LogDebug, LogInfo, LogNotice, LogWarning, LogError, LogCritical (Default: LogDebug)
+	logger.SetLevel(shim.LogInfo)
+
+	logLevel, _ := shim.LogLevel(os.Getenv("SHIM_LOGGING_LEVEL"))
+	shim.SetLoggingLevel(logLevel)
+
 	err := shim.Start(new(CarInsuranceChaincode))
 	if err != nil {
 		fmt.Printf("Error starting Simple chaincode: %s", err)
@@ -68,6 +75,8 @@ func (t *CarInsuranceChaincode) Invoke(stub shim.ChaincodeStubInterface, functio
 		return t.createClaim(stub, args)
 	} else if function == "verifyIdentity" {
 		return t.verifyUserIdentity(stub, args[0])
+	} else if function == "inspectVehicle" {
+		return t.doVehicleInspection(stub, args[0])
 	}
 
 	return nil, nil
@@ -80,7 +89,7 @@ func (t *CarInsuranceChaincode) Query(stub shim.ChaincodeStubInterface, function
 	fmt.Println("Query..")
 
 	if function == "getClaim" {
-		return t.getClaim(stub, args)
+		return t.getClaim(stub, args[0])
 	}
 
 	return nil, errors.New("Received unknown function query: " + function)
@@ -128,18 +137,17 @@ func (t *CarInsuranceChaincode) createClaim(stub shim.ChaincodeStubInterface, ar
 //	 getClaim - Gets claim details.
 //   args - key
 //=================================================================================================================================
-func (t *CarInsuranceChaincode) getClaim(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var key, jsonResp string
+func (t *CarInsuranceChaincode) getClaim(stub shim.ChaincodeStubInterface, id string) ([]byte, error) {
+	var jsonResp string
 	//var err error
 
-	if len(args) != 1 {
-		return nil, errors.New("Incorrect number of arguments. Expecting name of the key to query")
+	if len(id) == 0 {
+		return nil, errors.New("No Id specified. Expecting id to query")
 	}
 
-	key = args[0]
-	valAsbytes, err := stub.GetState(key)
+	valAsbytes, err := stub.GetState(id)
 	if err != nil {
-		jsonResp = "{\"Error\":\"Failed to get value of " + key + "\"}"
+		jsonResp = "{\"Error\":\"Failed to get value of " + id + "\"}"
 		return nil, errors.New(jsonResp)
 	}
 
@@ -198,7 +206,7 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 	var claimUser User
 	var log string = ""
 	userData = GetMultipleUserData()
-	data, err := stub.GetState(id)
+	data, err := t.getClaim(stub, id)
 	var userMatched bool = false
 
 	if err != nil {
@@ -231,6 +239,9 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 			if err != nil {
 				jsonResp = "{\"Error\":\"User Identity authentication failed. Status could not be updated.\"}"
 				return nil, errors.New(jsonResp)
+			} else {
+				jsonResp = "{\"Error\":\"User Identity authentication failed. Claim cancelled.\"}"
+				return nil, errors.New(jsonResp)
 			}
 			logger.Infof("User Identity authentication failed")
 		}
@@ -247,4 +258,33 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 
 	return data, nil
 
+}
+
+//=================================================================================================================================
+//	 doVehicleInspection - Inspects Vehicle and updates state (first stage).
+//	 id - claim ID
+//=================================================================================================================================
+func (t *CarInsuranceChaincode) doVehicleInspection(stub shim.ChaincodeStubInterface, id string) ([]byte, error) {
+	var claimData Claim
+	var jsonResp string
+	data, err := t.getClaim(stub, id)
+
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to retrieve claim details\"}"
+		return nil, errors.New(jsonResp)
+	}
+
+	if claimData.Status == STATE_IDENTITY_INSPECTION {
+		claimData.Status = STATE_VEHICLE_INSPECTION
+		data, err = t.updateClaimStatus(stub, claimData)
+		if err != nil {
+			jsonResp = "{\"Error\":\"Vehicle Inspection Successful but status could not be updated.\"}"
+			return nil, errors.New(jsonResp)
+		}
+	} else {
+		jsonResp = "{\"Error\":\"Vehicle Inspection cannot be done. Claim is not in required state.\"}"
+		return nil, errors.New(jsonResp)
+	}
+
+	return data, nil
 }

@@ -1,2 +1,7 @@
-1. Direct status update working fine. Single user verification working fine.
-   Find why user identity verification fails for multiple users in sample data 
+1. When claim is created - status is 0
+2. After Verification :
+	If identity verified - status updated to 1
+	Else claim is cancelled - status updated to 5.
+
+3. Implement Vehicle Inspection stage
+4. Implement Logging and authorization
