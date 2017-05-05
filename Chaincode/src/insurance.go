@@ -271,26 +271,63 @@ func (t *CarInsuranceChaincode) verifyUserIdentity(stub shim.ChaincodeStubInterf
 func (t *CarInsuranceChaincode) doVehicleInspection(stub shim.ChaincodeStubInterface, id string) ([]byte, error) {
 	var claimData Claim
 	var jsonResp string
+	var incidentData [5]Incident
+	var claimUser User
+	var log string = ""
+	incidentData = GetIncidentsData()
 	data, err := t.getClaim(stub, id)
+	var userMatched bool = false
 
 	if err != nil {
-		jsonResp = "{\"Error\":\"Failed to retrieve claim details\"}"
+		jsonResp = "{\"Error\":\"Failed to retrieve claim details for Vehicle Inspection\"}"
 		return nil, errors.New(jsonResp)
 	}
 
 	err = json.Unmarshal(data, &claimData)
 	if err != nil {
-		jsonResp = "{\"Error\":\"Failed to UnMarshal claim data\"}"
+		jsonResp = "{\"Error\":\"Failed to UnMarshal claim data for Vehicle Inspection\"}"
 		return nil, errors.New(jsonResp)
 	}
 
+	claimUser = claimData.UserDetails
+
 	if claimData.Status == STATE_IDENTITY_INSPECTION {
-		claimData.Status = STATE_VEHICLE_INSPECTION
-		data, err = t.updateClaimStatus(stub, claimData)
-		if err != nil {
-			jsonResp = "{\"Error\":\"Vehicle Inspection Successful but status could not be updated.\"}"
-			return nil, errors.New(jsonResp)
+		for i := 0; i < len(incidentData); i++ {
+			if incidentData[i].FirstName == claimUser.FirstName && incidentData[i].LastName == claimUser.LastName && incidentData[i].LicencePlateNumber == claimUser.LicencePlateNumber && incidentData[i].PolicyId == claimUser.PolicyId && incidentData[i].VIN == claimUser.VIN {
+				if incidentData[i].Status == 1 {
+					log = log + "Inspection Verified!"
+					claimData.Status = STATE_VEHICLE_INSPECTION
+					data, err = t.updateClaimStatus(stub, claimData)
+					if err != nil {
+						jsonResp = "{\"Error\":\"Vehicle Inspection successful. Status could not be updated.\"}"
+						return nil, errors.New(jsonResp)
+					}
+					userMatched = true
+					break
+				} else {
+					log = log + "Inspection Verification Failed. Cancelling claim transaction!"
+					claimData.Status = STATE_CANCELLED
+					data, err = t.updateClaimStatus(stub, claimData)
+					if err != nil {
+						jsonResp = "{\"Error\":\"Vehicle Inspection Failed. Status could not be updated.\"}"
+						return nil, errors.New(jsonResp)
+					}
+					userMatched = true
+					break
+				}
+			}
 		}
+
+		if userMatched != true {
+			claimData.Status = STATE_CANCELLED
+			data, err = t.updateClaimStatus(stub, claimData)
+			if err != nil {
+				jsonResp = "{\"Error\":\"Vehicle Inspection failed. Record not found. Status could not be updated.\"}"
+				return nil, errors.New(jsonResp)
+			}
+			logger.Infof("Vehicle Inspection failed")
+		}
+
 	} else {
 		jsonResp = "{\"Error\":\"Vehicle Inspection cannot be done. Claim is not in required state.\"}"
 		return nil, errors.New(jsonResp)
