@@ -29,6 +29,7 @@ func GetIncidentsData() [5]Incident {
 	newincident.FirstName = "John"
 	newincident.LastName = "Doe"
 	newincident.PolicyId = "P12345"
+	newincident.IncidentDate = time.Date(2017, months["March"], 28, 0, 0, 0, 0, time.UTC)
 	newincident.VIN = "Gh564HG445"
 	newincident.LicencePlateNumber = "JOHNDOE"
 	newincident.Status = 1
@@ -37,6 +38,7 @@ func GetIncidentsData() [5]Incident {
 	newincident.FirstName = "Amita"
 	newincident.LastName = "Kamat"
 	newincident.PolicyId = "P28789"
+	newincident.IncidentDate = time.Date(2017, months["April"], 2, 0, 0, 0, 0, time.UTC)
 	newincident.VIN = "Gh564HY6678"
 	newincident.LicencePlateNumber = "AMITAK7"
 	newincident.Status = 0
@@ -45,6 +47,7 @@ func GetIncidentsData() [5]Incident {
 	newincident.FirstName = "Mohammed"
 	newincident.LastName = "Haroon"
 	newincident.PolicyId = "P13589"
+	newincident.IncidentDate = time.Date(2017, months["May"], 1, 0, 0, 0, 0, time.UTC)
 	newincident.VIN = "Gh564GR44378"
 	newincident.LicencePlateNumber = "MHAROON"
 	newincident.Status = 0
@@ -53,6 +56,7 @@ func GetIncidentsData() [5]Incident {
 	newincident.FirstName = "Nethra"
 	newincident.LastName = "Reddy"
 	newincident.PolicyId = "P84756"
+	newincident.IncidentDate = time.Date(2017, months["February"], 10, 0, 0, 0, 0, time.UTC)
 	newincident.VIN = "RT469HY6678"
 	newincident.LicencePlateNumber = "N283RED"
 	newincident.Status = 1
@@ -61,6 +65,7 @@ func GetIncidentsData() [5]Incident {
 	newincident.FirstName = "Pavana"
 	newincident.LastName = "Achar"
 	newincident.PolicyId = "P75985"
+	newincident.IncidentDate = time.Date(2016, months["December"], 28, 0, 0, 0, 0, time.UTC)
 	newincident.VIN = "RT469HT5567"
 	newincident.LicencePlateNumber = "P5ACHAR"
 	newincident.Status = 1

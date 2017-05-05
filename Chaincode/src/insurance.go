@@ -293,7 +293,7 @@ func (t *CarInsuranceChaincode) doVehicleInspection(stub shim.ChaincodeStubInter
 
 	if claimData.Status == STATE_IDENTITY_INSPECTION {
 		for i := 0; i < len(incidentData); i++ {
-			if incidentData[i].FirstName == claimUser.FirstName && incidentData[i].LastName == claimUser.LastName && incidentData[i].LicencePlateNumber == claimUser.LicencePlateNumber && incidentData[i].PolicyId == claimUser.PolicyId && incidentData[i].VIN == claimUser.VIN {
+			if incidentData[i].FirstName == claimUser.FirstName && incidentData[i].LastName == claimUser.LastName && incidentData[i].LicencePlateNumber == claimUser.LicencePlateNumber && incidentData[i].PolicyId == claimUser.PolicyId && incidentData[i].VIN == claimUser.VIN && incidentData[i].IncidentDate == claimData.IncidentDate {
 				if incidentData[i].Status == 1 {
 					log = log + "Inspection Verified!"
 					claimData.Status = STATE_VEHICLE_INSPECTION
