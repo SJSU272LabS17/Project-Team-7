@@ -114,7 +114,7 @@ func (t *CarInsuranceChaincode) createClaim(stub shim.ChaincodeStubInterface, ar
 
 	var newUser = NewUser(args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12])
 
-	data, err := strconv.ParseFloat(args[2], 32)
+	data, err := strconv.ParseFloat(args[4], 32)
 	if err != nil {
 		return nil, errors.New("Error getting amount.")
 	}
