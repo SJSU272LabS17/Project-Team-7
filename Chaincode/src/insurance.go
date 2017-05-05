@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
@@ -97,24 +98,27 @@ func (t *CarInsuranceChaincode) Query(stub shim.ChaincodeStubInterface, function
 
 //=================================================================================================================================
 //	 createClaim - Creates a new Claim object and saves it.
-//   args - ID, IncidentDate, Amount,FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber
+//   args - ID, IncidentDay, IncidentMonth, IncidentYear, Amount,FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber
 //=================================================================================================================================
 func (t *CarInsuranceChaincode) createClaim(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	if len(args) != 11 {
+	if len(args) != 13 {
 		return nil, errors.New("Incorrect number of arguments. ID, IncidentDate, Amount, FirstName, LastName, Email, SSN, BirthDate, PolicyId, VIN, LicencePlateNumber required.")
 	}
 
-	if len(args[2]) == 0 {
+	if len(args[4]) == 0 {
 		return nil, errors.New("Invalid Amount.")
 	}
+	year, err := strconv.ParseInt(args[3], 10, 32)
+	day, err := strconv.ParseInt(args[1], 10, 32)
+	var incidentdate = time.Date(int(year), months[args[2]], int(day), 0, 0, 0, 0, time.UTC)
 
-	var newUser = NewUser(args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10])
+	var newUser = NewUser(args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12])
 
 	data, err := strconv.ParseFloat(args[2], 32)
 	if err != nil {
 		return nil, errors.New("Error getting amount.")
 	}
-	var newClaim = NewClaim(args[0], args[1], data, newUser)
+	var newClaim = NewClaim(args[0], incidentdate, data, newUser)
 
 	bytes, err := json.Marshal(newClaim)
 

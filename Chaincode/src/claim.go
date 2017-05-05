@@ -1,5 +1,9 @@
 package main
 
+import (
+	"time"
+)
+
 //==============================================================================================================================
 //	User - structure for policy holder details
 //==============================================================================================================================
@@ -19,16 +23,34 @@ type User struct {
 //==============================================================================================================================
 type Claim struct {
 	Id           string
-	IncidentDate string
+	IncidentDate time.Time
 	Status       int
 	Amount       float64
 	UserDetails  User
 }
 
 //==============================================================================================================================
+//	 Constants for Month
+//==============================================================================================================================
+var months = map[string]time.Month{
+	"January":   time.January,
+	"February":  time.February,
+	"March":     time.March,
+	"April":     time.April,
+	"May":       time.May,
+	"June":      time.June,
+	"July":      time.July,
+	"August":    time.August,
+	"September": time.September,
+	"October":   time.October,
+	"November":  time.November,
+	"December":  time.December,
+}
+
+//==============================================================================================================================
 //	 NewClaim - created new claim with the parameters passed.
 //==============================================================================================================================
-func NewClaim(id string, incident_date string, amount float64, user_details User) Claim {
+func NewClaim(id string, incident_date time.Time, amount float64, user_details User) Claim {
 
 	var newClaim Claim
 
@@ -44,7 +66,7 @@ func NewClaim(id string, incident_date string, amount float64, user_details User
 //==============================================================================================================================
 //	 NewClaim - created new claim with the parameters passed.
 //==============================================================================================================================
-func NewClaimWithState(id string, incident_date string, amount float64, user_details User, state int) Claim {
+func NewClaimWithState(id string, incident_date time.Time, amount float64, user_details User, state int) Claim {
 
 	var newClaim Claim
 
