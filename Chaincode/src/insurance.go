@@ -361,7 +361,7 @@ func (t *CarInsuranceChaincode) doClaimInspection(stub shim.ChaincodeStubInterfa
 	}
 
 	timeDifference := claimData.ApplyDate.Sub(claimData.IncidentDate)
-	if timeDifference.Hours() > 2160 {
+	if timeDifference.Hours() <= 2160 {
 		claimData.Status = STATE_CLAIM_INSPECTION
 		data, err = t.updateClaimStatus(stub, claimData)
 		if err != nil {
