@@ -78,6 +78,8 @@ func (t *CarInsuranceChaincode) Invoke(stub shim.ChaincodeStubInterface, functio
 		return t.verifyUserIdentity(stub, args[0])
 	} else if function == "inspectVehicle" {
 		return t.doVehicleInspection(stub, args[0])
+	} else if function == "inspectClaim" {
+		return t.doClaimInspection(stub, args[0])
 	}
 
 	return nil, nil
@@ -333,5 +335,49 @@ func (t *CarInsuranceChaincode) doVehicleInspection(stub shim.ChaincodeStubInter
 		return nil, errors.New(jsonResp)
 	}
 
+	return data, nil
+}
+
+//=================================================================================================================================
+//	 doClaimInspection - Inspects claim and updates state (third stage).
+//	 id - claim ID
+//=================================================================================================================================
+func (t *CarInsuranceChaincode) doClaimInspection(stub shim.ChaincodeStubInterface, id string) ([]byte, error) {
+
+	var claimData Claim
+	var jsonResp string
+	//var claimUser User
+	data, err := t.getClaim(stub, id)
+
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to retrieve claim details for Vehicle Inspection\"}"
+		return nil, errors.New(jsonResp)
+	}
+
+	err = json.Unmarshal(data, &claimData)
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to UnMarshal claim data for Vehicle Inspection\"}"
+		return nil, errors.New(jsonResp)
+	}
+
+	timeDifference := claimData.ApplyDate.Sub(claimData.IncidentDate)
+	if timeDifference.Hours() > 2160 {
+		claimData.Status = STATE_CLAIM_INSPECTION
+		data, err = t.updateClaimStatus(stub, claimData)
+		if err != nil {
+			jsonResp = "{\"Error\":\"Claim Inspection successful. Status could not be updated.\"}"
+			return nil, errors.New(jsonResp)
+		}
+	} else {
+		claimData.Status = STATE_CANCELLED
+		data, err = t.updateClaimStatus(stub, claimData)
+		if err != nil {
+			jsonResp = "{\"Error\":\"Claim Inspection failed. Incident is more than 90 days old. Status could not be updated.\"}"
+			return nil, errors.New(jsonResp)
+		}
+		logger.Infof("Vehicle Inspection failed")
+	}
+
+	//claimUser = claimData.UserDetails
 	return data, nil
 }

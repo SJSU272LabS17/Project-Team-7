@@ -27,6 +27,7 @@ type Claim struct {
 	Status       int
 	Amount       float64
 	UserDetails  User
+	ApplyDate    time.Time
 }
 
 //==============================================================================================================================
@@ -59,6 +60,7 @@ func NewClaim(id string, incident_date time.Time, amount float64, user_details U
 	newClaim.UserDetails = user_details
 	newClaim.Amount = amount
 	newClaim.Status = STATE_INIT_CLAIM
+	newClaim.ApplyDate = time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 0, 0, 0, 0, time.UTC)
 
 	return newClaim
 }
@@ -75,6 +77,7 @@ func NewClaimWithState(id string, incident_date time.Time, amount float64, user_
 	newClaim.UserDetails = user_details
 	newClaim.Amount = amount
 	newClaim.Status = state
+	newClaim.ApplyDate = time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 0, 0, 0, 0, time.UTC)
 
 	return newClaim
 }
