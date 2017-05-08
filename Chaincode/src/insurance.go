@@ -360,22 +360,27 @@ func (t *CarInsuranceChaincode) doClaimInspection(stub shim.ChaincodeStubInterfa
 		return nil, errors.New(jsonResp)
 	}
 
-	timeDifference := claimData.ApplyDate.Sub(claimData.IncidentDate)
-	if timeDifference.Hours() <= 2160 {
-		claimData.Status = STATE_CLAIM_INSPECTION
-		data, err = t.updateClaimStatus(stub, claimData)
-		if err != nil {
-			jsonResp = "{\"Error\":\"Claim Inspection successful. Status could not be updated.\"}"
-			return nil, errors.New(jsonResp)
+	if claimData.Status == STATE_VEHICLE_INSPECTION {
+		timeDifference := claimData.ApplyDate.Sub(claimData.IncidentDate)
+		if timeDifference.Hours() <= 2160 {
+			claimData.Status = STATE_CLAIM_INSPECTION
+			data, err = t.updateClaimStatus(stub, claimData)
+			if err != nil {
+				jsonResp = "{\"Error\":\"Claim Inspection successful. Status could not be updated.\"}"
+				return nil, errors.New(jsonResp)
+			}
+		} else {
+			claimData.Status = STATE_CANCELLED
+			data, err = t.updateClaimStatus(stub, claimData)
+			if err != nil {
+				jsonResp = "{\"Error\":\"Claim Inspection failed. Incident is more than 90 days old. Status could not be updated.\"}"
+				return nil, errors.New(jsonResp)
+			}
+			logger.Infof("Vehicle Inspection failed")
 		}
 	} else {
-		claimData.Status = STATE_CANCELLED
-		data, err = t.updateClaimStatus(stub, claimData)
-		if err != nil {
-			jsonResp = "{\"Error\":\"Claim Inspection failed. Incident is more than 90 days old. Status could not be updated.\"}"
-			return nil, errors.New(jsonResp)
-		}
-		logger.Infof("Vehicle Inspection failed")
+		jsonResp = "{\"Error\":\"Claim Inspection cannot be done. Claim is not in required state.\"}"
+		return nil, errors.New(jsonResp)
 	}
 
 	//claimUser = claimData.UserDetails
