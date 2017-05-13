@@ -18,6 +18,8 @@ type Incident struct {
 	VIN                string
 	LicencePlateNumber string
 	Status             int
+	SelfLossAmount     float64
+	OtherLossAmount    float64
 }
 
 //==============================================================================================================================
@@ -33,6 +35,8 @@ func GetIncidentsData() [5]Incident {
 	newincident.VIN = "Gh564HG445"
 	newincident.LicencePlateNumber = "JOHNDOE"
 	newincident.Status = 1
+	newincident.SelfLossAmount = 200
+	newincident.OtherLossAmount = 520.50
 	incidentDetails[0] = newincident
 
 	newincident.FirstName = "Amita"
@@ -41,7 +45,10 @@ func GetIncidentsData() [5]Incident {
 	newincident.IncidentDate = time.Date(2017, months["April"], 2, 0, 0, 0, 0, time.UTC)
 	newincident.VIN = "Gh564HY6678"
 	newincident.LicencePlateNumber = "AMITAK7"
-	newincident.Status = 0
+	newincident.SelfLossAmount = 0
+	newincident.OtherLossAmount = 0
+	newincident.Status = 2
+
 	incidentDetails[1] = newincident
 
 	newincident.FirstName = "Mohammed"
@@ -51,6 +58,8 @@ func GetIncidentsData() [5]Incident {
 	newincident.VIN = "Gh564GR44378"
 	newincident.LicencePlateNumber = "MHAROON"
 	newincident.Status = 0
+	newincident.SelfLossAmount = 0
+	newincident.OtherLossAmount = 0
 	incidentDetails[2] = newincident
 
 	newincident.FirstName = "Nethra"
@@ -60,6 +69,8 @@ func GetIncidentsData() [5]Incident {
 	newincident.VIN = "RT469HY6678"
 	newincident.LicencePlateNumber = "N283RED"
 	newincident.Status = 1
+	newincident.SelfLossAmount = 1000
+	newincident.OtherLossAmount = 1586
 	incidentDetails[3] = newincident
 
 	newincident.FirstName = "Pavana"
@@ -69,6 +80,8 @@ func GetIncidentsData() [5]Incident {
 	newincident.VIN = "RT469HT5567"
 	newincident.LicencePlateNumber = "P5ACHAR"
 	newincident.Status = 1
+	newincident.SelfLossAmount = 360
+	newincident.OtherLossAmount = 650.50
 	incidentDetails[4] = newincident
 
 	return incidentDetails
