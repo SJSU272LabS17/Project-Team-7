@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>Home</title>
+		<link rel="stylesheet" type="text/css" href="Style/main.css" ></link>
+		<script src="JavaScript/plugins/jQuery-1.11.3.js" type="text/javascript"></script>
+		<script src="node_modules/socket.io-client/dist/socket.io.min.js"></script>
+		<script>var pgNm = "Main";</script>
+		<script src="JavaScript/config/config.js" type="text/javascript"></script>
+		<script src="JavaScript/index/index.js"></script>
+	</head>
+	<body>
+		<table id="mainTbl" >
+			<tr>
+				<td class="smlBrk"></td>
+				<td id="topRw" colspan="7.5"><img id="logo" src="" alt="company logo" text="company logo" /></td>
+				<td class="smlBrk"></td>
+				<td colspan="7.5"><span class="rtTxt bldTxt">&nbsp;BLOCKINSURE</span></td>
+				<td class="smlBrk"></td>
+			</tr>
+			<tr>
+				<td class="smlBrk"></td>
+				<td class="smlBrk"></td>
+				<td></td>
+				<td class="smlBrk"></td>
+			</tr>
+			<tr>
+				<td class="brkRw"></td>
+				<td class="smlBrk brkRw"></td>
+				<td colspan="14" class="brkRw"></td>
+				<td class="smlBrk brkRw"></td>
+			</tr>
+			<tr>
+				<td class="smlBrk gapRw"></td>
+				<td class="gapRw"></td>
+				<td class="smlBrk gapRw"></td>
+				<td class="gapRw"></td>
+				<td class="smlBrk gapRw"></td>
+			</tr>
+			<!--<tr>
+				<td class="smlBrk"></td>
+				<td style="font-size:1.5em; color:#00648D;">Main Menu:</td>
+				<td class="smlBrk"></td>
+			</tr>-->
+			<tr class="prematureMsg" >
+				<td class="smlBrk gapRw"></td>
+				<td class="gapRw"></td>
+				<td class="smlBrk gapRw"></td>
+				<td class="gapRw"></td>
+				<td class="smlBrk gapRw"></td>
+			</tr>
+			<!--<tr class="prematureMsg" >
+				<td class="smlBrk"></td>
+				<td class="prematureMsgTxt" colspan="3" ><img src="Images/loading.gif" height="50" /><br /><br />Just finalizing set up. Please wait...</td>
+				<td class="smlBrk"></td>
+			</tr>-->
+			<tr class="welcomeMsg" >
+				<td class="smlBrk gapRw"></td>
+				<td class="gapRw"></td>
+				<td class="smlBrk gapRw"></td>
+				<td class="gapRw"></td>
+				<td class="smlBrk gapRw"></td>
+			</tr>
+			<tr class="welcomeMsg" >
+				<td class="smlBrk"></td>
+				<td class="bxHd welcomeHeader" colspan="15" id="lftBxHd" >Welcome to BlockInsure!</td>
+				<td class="smlBrk"></td>
+			</tr>
+			<!--<tr  class="welcomeMsg">
+				<td class="smlBrk"></td>
+				<td class="welcomeMsgTxt bordLRB welcomeHeader" style="padding:8.5px 5px 8.5px 5px" colspan="3" >To get a scenario set up click on the link to the admin console then use one of the Create Scenario buttons. This will create cars and move them to their locations. <br><br>Otherwise you can create your own cars by clicking on Create Asset.</td>
+			</tr>-->
+			<tr>
+				<td class="smlBrk gapRw"></td>
+				<td class="gapRw"></td>
+				<td class="smlBrk gapRw"></td>
+				<td class="gapRw"></td>
+				<td class="smlBrk gapRw"></td>
+			</tr>
+			<tr>
+				<td class="smlBrk"></td>
+				<td class="bxHd" colspan="15" id="lftBxHd" >Regulator</td>
+				<td class="smlBrk"></td>
+			</tr>
+			<tr  class="lnkTxt">
+				<td class="smlBrk"></td>
+				<td id="viewBlock" class="bordLRB" style="padding:8.5px 5px 8.5px 5px" colspan="5" ><a href="stats.html">Live Stats</a></td>
+				<td id="viewBlock" class="bordLRB" style="padding: 0px 3px 0px 5px;" colspan="5" ><a href="regulator-view.html" >Regulator View</a></td>
+				<td id="createAsset" class="bordLRB" style="padding:8.5px 5px 8.5px 5px" colspan="5" ><a href="regulator.html" >Create Claim</a></td>
+			</tr>
+			<tr >
+				<td class="smlBrk smlGap"></td>
+				<td class="smlGap"></td>
+				<td class="smlBrk smlGap"></td>
+				<td class="smlGap"></td>
+				<td class="smlBrk smlGap"></td>
+			</tr>
+			<tr>
+				<td class="smlBrk"></td>
+				<td class="bxHd" colspan="15" id="lftBxHd" >Transfer Claim</td>
+				<td class="smlBrk"></td>
+			</tr>
+			<tr  class="lnkTxt">
+				<td class="smlBrk"></td>
+				<td id="manTrnsfr" class="bordLRB" colspan="3" style="padding:8.5px 5px 8.5px 5px" ><a href="regulator.html" > Regulator &rarr; Insurance Company </a></td>
+				<td id="manTrnsfr" class="bordLRB" colspan="3" style="padding:0px 5px 8.5px 5px" ><a href="insurance-company.html" > Insurance Company &rarr; Identity Verification</a></td>
+				<td id="dlrTrnsfr" class="bordLRB" colspan="3" style="padding:0 5px 0px 5px" ><a href="identity-verification.html" > Identity Verification &rarr; Vehicle Inspection</a></td>
+				<td id="lsCntrct" colspan="3" class="bordLRB" style="padding:8.5px 5px 0px 5px"><a href="vehicle-inspection.html" > Vehicle Inspection &rarr; Claim Verification</a></td>
+				<td id="lsTrnsfr" colspan="3" class="bordLRB" style="padding:8.5px 5px 8.5px 5px" ><a href="claim-verification.html" > Claim Verification &rarr; Settlement Authority</a></td>
+				<td class="smlBrk"></td>
+			</tr>
+			<tr >
+				<td class="smlBrk smlGap"></td>
+				<td class="smlGap"></td>
+				<td class="smlBrk smlGap"></td>
+				<td class="smlGap"></td>
+				<td class="smlBrk smlGap"></td>
+			</tr>
+			<tr>
+				<td class="smlBrk"></td>
+				<td class="bxHd" id="lftBxHd" colspan="15" > Update Claim </td>
+			</tr>
+			<tr  class="lnkTxt">
+				<td class="smlBrk"></td>
+				<td id="lsTrnsfr" colspan="15" class="bordLRB" style="padding:8.5px 5px 8.5px 5px"><a href="insurance-company-update.html" >Insurance Company Update</a></td>
+				<td class="smlBrk"></td>
+			</tr>
+			<tr>
+				<td class="smlBrk smlGap"></td>
+				<td class="smlGap"></td>
+				<td class="smlBrk smlGap"></td>
+				<td class="smlGap"></td>
+				<td class="smlBrk smlGap"></td>
+			</tr>
+			<tr>
+				<td class="smlBrk"></td>
+				<td class="bxHd" id="lftBxHd" colspan="15" > Settle Claim </td>
+			</tr>
+			<tr  class="lnkTxt">
+				<td class="smlBrk"></td>
+				<td id="lsTrnsfr" colspan="15" class="bordLRB" style="padding:8.5px 5px 8.5px 5px"><a href="settlement.html" >Settlement Authority &rarr; Settlement</a></td>
+				<td class="smlBrk"></td>
+			</tr>
+			<tr>
+				<td class="smlBrk smlGap"></td>
+				<td class="smlGap"></td>
+				<td class="smlBrk smlGap"></td>
+				<td class="smlGap"></td>
+				<td class="smlBrk smlGap"></td>
+			</tr>
+			<tr>
+				<td class="smlBrk smlGap"></td>
+				<td class="smlGap"></td>
+				<td class="smlBrk smlGap"></td>
+				<td class="smlGap"></td>
+				<td class="smlBrk smlGap"></td>
+			</tr>
+			<!--<tr>
+				<td class="smlBrk"></td>
+				<td class="bxHd" id="lftBxHd" colspan="3" > Admin </td>
+			</tr>
+			<tr  class="lnkTxt">
+				<td class="smlBrk"></td>
+				<td id="lsTrnsfr" colspan="3" class="bordLRB" style="padding:8.5px 5px 8.5px 5px"><a href="admin-console.html" >Admin Console</a></td>
+				<td class="smlBrk"></td>
+			</tr>-->
+			<tr>
+				<td class="smlBrk smlGap"></td>
+					<td style="color:#00648D; padding-top:25px">Version: 1.0</td>
+				<td class="smlBrk smlGap"></td>
+			</tr>
+			<tr>
+				<td class="smlBrk smlGap"></td>
+				<td class="smlGap"></td>
+				<td class="smlBrk smlGap"></td>
+				<td class="smlGap"></td>
+				<td class="smlBrk smlGap"></td>
+			</tr>
+		</table>
+	</body>
+</html>
