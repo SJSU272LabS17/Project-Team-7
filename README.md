@@ -2,6 +2,8 @@
 
 Project App Link : https://auto-insurance-demo-team7.mybluemix.net/
 
+Video Link : https://www.youtube.com/watch?v=tlkrpC7Gbjo
+
 
 #1. Predictive analysis of risky driving patterns using statistical and machine learning models.
 
