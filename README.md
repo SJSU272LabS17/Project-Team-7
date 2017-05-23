@@ -4,6 +4,31 @@ Project App Link : https://auto-insurance-demo-team7.mybluemix.net/
 
 Video Link : https://www.youtube.com/watch?v=tlkrpC7Gbjo
 
+[![auto-insurance.png](https://s9.postimg.org/s03x55mhr/auto-insurance.png)](https://postimg.org/image/494jn1maj/)
+
+## The entire process is divided into the following steps:  
+### Regulator -   
+creates the claim Form template with a unique ID and transfers it to Insurance Company.  
+  
+### Insurance Company -   
+fills the template with incident details and transfers it to Identity Verification.  
+  
+### Identity Verification -   
+After verification transfers it to Vehicle Inspection.  
+  
+### Vehicle Inspection -   
+after inspection transfers the claim to Claim Verification. 
+  
+### Claim Verification -   
+verifies that the claim type of the claimant covers the incident type, that the claim is not duplicate and transfers it to settlement authority.
+  
+### Settlement Authority -   
+Settles the claim ending the process.  
+  
+----------------------------------------------------------------------------------------------------------------------------------------  
+    
+      
+       
 
 #1. Predictive analysis of risky driving patterns using statistical and machine learning models.
 
@@ -23,7 +48,7 @@ In this project, we plan to design and implement a predictive analytics model wh
 
 
 
-#3. Fraudulent insurance claim management using Blockchain technology - APPROVED
+# 3. Fraudulent insurance claim management using Blockchain technology - APPROVED
 
 App Link : https://auto-insurance-demo-team7.mybluemix.net/
 
